@@ -1,0 +1,122 @@
+/* The default accent color is too light which breaks syntax highlighting, this is roughly accent-darken-3 */
+$accent: #005c45;
+$background: #005c45;
+$primary: #005c45;
+$primary-background: #005c45;
+$accent-darken-1: #005c45;
+$accent-darken-2: #005c45;
+$accent-darken-3: #005c45;
+
+History {
+    scrollbar-color: $accent-darken-3;
+}
+
+/* By default, set line height to 3, this will be overwritten with '.small' class if --small was provided */
+ListItem {
+    min-height: 3;
+}
+
+/* Line counter on the left */
+.history-index {
+    /* I don't think the app will be able to handle 99999 messages anyway */
+    width: 5;
+    /* Less accented */
+    color: $text 50%;
+    /* Make numbers nicely line up */
+    text-align: right;
+    /* 1 char padding above and below */
+    padding: 1 0;
+}
+
+/* Timestamp */
+.history-time {
+    width: 10;
+    color: $text 50%;
+    padding: 1;
+}
+
+/* Opcode */
+.history-opcode {
+    width: 3;
+    padding: 1 0;
+    text-align: center;
+}
+
+/* Indicates the type of the history entry */
+.history-sign {
+    text-align: right;
+    width: 2;
+    text-style: bold;
+    padding: 1 0 0 0;
+}
+/* Need to rethink colors, so that they work with all color schemes */
+.OUTGOING .history-opcode, .OUTGOING .history-sign {
+    color: orange;
+}
+.INCOMING .history-opcode, .INCOMING .history-sign {
+    color: green;
+}
+.DEBUG .history-opcode, .DEBUG .history-sign {
+    color: gray;
+}
+.INFO .history-opcode, .INFO .history-sign {
+    color: $text;
+}
+.WARNING .history-opcode, .WARNING .history-sign {
+    color: yellow;
+}
+.ERROR .history-opcode, .ERROR .history-sign {
+    color: red;
+}
+
+/* The actual history entry, in the middle, could be multiline */
+.history-text {
+    text-style: bold;
+    padding: 1 2;
+}
+.history-text.selected {
+    outline: round #888;
+}
+
+/* Copy button on the right */
+.history-btn {
+    dock: right;
+    margin-right: 2;
+    width: 17;
+    outline: round $success;
+    border: none;
+    color: $success;
+    background: $boost;
+}
+
+/* --small switch enables smaller UI */
+.small ListItem {
+    min-height: 1;
+}
+
+.small .history-time {
+    padding: 0 1;
+}
+
+.small .history-index, .small .history-sign, .small .history-btn, .small .history-opcode {
+    padding: 0;
+}
+
+.small .history-text {
+    padding: 0 2;
+}
+.small .history-text.selected {
+    outline: none !important;
+}
+
+.small .history-btn {
+    height: 1;
+    outline: none;
+    border: none;
+}
+
+.small Input {
+    min-height: 1;
+    outline: none;
+    border: none;
+}

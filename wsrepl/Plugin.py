@@ -65,7 +65,7 @@ class Plugin:
 
         - message.is_hidden - if True, the message will not be displayed in the history
 
-        ! Do not use this hook to send respondes to the server. Use the after_message_received hook instead !
+        ! Do not use this hook to send responses to the server. Use the after_message_received hook instead !
         """
         pass
 

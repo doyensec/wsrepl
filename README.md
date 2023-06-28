@@ -141,3 +141,10 @@ Replace URL with your target websocket URL and auth_plugin.py with the path to t
 ## Contributing
 
 Contributions to wsrepl are welcome!
+
+## Credits
+
+This project has been sponsored by [Doyensec LLC](https://www.doyensec.com/).
+
+![Doyensec Research](https://github.com/doyensec/inql/blob/master/docs/doyensec_logo.svg "Doyensec Logo")
+

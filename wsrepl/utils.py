@@ -90,7 +90,7 @@ def _get_plugin_name(plugin_path):
     return plugin_name
 
 
-def load_plugin(plugin_path) -> Plugin:
+def load_plugin(plugin_path) -> type[Plugin]:
     """Loads a plugin from a file path or returns an empty plugin if no path is specified"""
     if not plugin_path:
         return Plugin

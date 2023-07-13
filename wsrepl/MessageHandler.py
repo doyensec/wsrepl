@@ -19,6 +19,7 @@ class MessageHandler:
                  url: str,
                  user_agent: str | None         = None,
                  origin: str | None             = None,
+                 cookies: list[str] | None      = None,
                  headers: list[str] | None      = None,
                  headers_file: str | None       = None,
                  ping_interval: int | float     = 24,
@@ -36,14 +37,14 @@ class MessageHandler:
         self.app = app
         self.plugin = load_plugin(plugin_path)(message_handler=self)
         self.initial_messages: list[WSMessage] = self._load_initial_messages(initial_msgs_file)
-        headers: OrderedDict = self._process_headers(headers, headers_file, user_agent, origin)
+        processed_headers: OrderedDict = self._process_headers(headers, headers_file, user_agent, origin, cookies)
 
         self._ws = WebsocketConnection(
             # Stuff WebsocketConnection needs to call back to us
             async_handler=self,
             # WebSocketApp args
             url=url,
-            header=headers
+            header=processed_headers
         )
 
         # Args passed to websocket.WebSocketApp.run_forever()
@@ -51,7 +52,7 @@ class MessageHandler:
             proxy = 'http://' + proxy if '://' not in proxy else proxy
 
         self._ws.connect_args = {
-            'suppress_origin': 'Origin' in headers,
+            'suppress_origin': 'Origin' in processed_headers,
             'sslopt': {'cert_reqs': ssl.CERT_NONE} if not verify_tls else {},
             'ping_interval': 0, # Disable websocket-client's autoping because it doesn't provide feedback
             'http_proxy_host': urlparse(proxy).hostname if proxy else None,
@@ -82,24 +83,29 @@ class MessageHandler:
         self.hide_0x1_ping_pong = hide_0x1_ping_pong
 
     def _process_headers(self, headers: list[str] | None, headers_file: str | None,
-                         user_agent: str | None, origin: str | None) -> OrderedDict:
+                         user_agent: str | None, origin: str | None, cookies: list[str]) -> OrderedDict:
         """Process headers and return an OrderedDict of headers."""
         result = OrderedDict()
+        cookie_headers = []
 
         # Headers from command line take precedence
         if headers:
             for header in headers:
                 name, value = map(str.strip, header.split(":", 1))
-                result[name] = value
+                if name.lower().strip() == "cookie":
+                    cookie_headers.append(value.strip())
+                else:
+                    result[name] = value
 
         # Headers from file are next
         if headers_file:
             with open(headers_file, "r") as f:
                 for header in f.read().splitlines():
                     name, value = map(str.strip, header.split(":", 1))
-                    if name in result:
-                        continue
-                    result[name] = value
+                    if name.lower().strip() == "cookie":
+                        cookie_headers.append(value.strip())
+                    elif name not in result:
+                        result[name] = value
 
         # Add User-Agent if not already present
         if user_agent and "User-Agent" not in result:
@@ -108,6 +114,14 @@ class MessageHandler:
         # Add Origin if not already present
         if origin and "Origin" not in result:
             result["Origin"] = origin
+
+        # Merge and add Cookies
+        if cookies:
+            cookie_value = "; ".join(cookies)
+            if cookie_headers:
+                result['Cookie'] = cookie_value + "; " + "; ".join(cookie_headers)
+            else:
+                result['Cookie'] = cookie_value
 
         return result
 

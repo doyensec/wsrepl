@@ -30,6 +30,7 @@ class WSRepl(App):
                  # Websocket settings
                  user_agent: str | None         = None,
                  origin: str | None             = None,
+                 cookies: list[str] | None      = None,
                  headers: list[str] | None      = None,
                  headers_file: str | None       = None,
                  ping_interval: int | float     = 24, # 0 -> disable auto ping
@@ -56,7 +57,7 @@ class WSRepl(App):
         # Message handler, spawns a thread to handle the websocket connection
         self.message_handler = MessageHandler(
             app=self,
-            url=url, user_agent=user_agent, origin=origin, headers=headers, headers_file=headers_file,
+            url=url, user_agent=user_agent, origin=origin, cookies=cookies, headers=headers, headers_file=headers_file,
             ping_interval=ping_interval, hide_ping_pong=hide_ping_pong,
             ping_0x1_interval=ping_0x1_interval, ping_0x1_payload=ping_0x1_payload, pong_0x1_payload=pong_0x1_payload,
             hide_0x1_ping_pong=hide_0x1_ping_pong,

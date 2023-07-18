@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wsrepl"
-version = "0.1.0"
+version = "0.2.0"
 description = "Websocket REPL for pentesters"
 authors = ["Andrew Konstantinov <105389353+execveat@users.noreply.github.com>"]
 license = "MIT"
@@ -11,10 +11,9 @@ keywords = ["websocket", "pentesting"]
 [tool.poetry.dependencies]
 python = ">3.10,<4.0"
 websocket-client = "^1.5.2"
-Pygments = "^2.15.1"
 pyperclip = "^1.8.2"
-rich = "^13.3.3"
-textual = "^0.27.0"
+rich = "^13.4.2"
+textual = "^0.30.0"
 
 [build-system]
 requires = ["poetry-core"]

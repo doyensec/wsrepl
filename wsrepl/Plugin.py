@@ -51,10 +51,6 @@ class Plugin:
         """Called when the websocket connection is lost"""
         pass
 
-    async def on_reconnect(self, timeout: int) -> None:
-        """Called when the websocket connection is lost, but will be reconnected after a timeout"""
-        pass
-
     # Message frame
     async def on_message_received(self, message: WSMessage) -> None:
         """Called when a (text) message is received from the server. Can modify the message before it is pushed to the history.

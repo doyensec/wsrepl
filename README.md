@@ -6,11 +6,12 @@
 
 ## Features
 
-- Interactively send and receive websocket messages.
-- Customize headers, ping/pong messages, and other parameters.
-- Handle SSL verification and reconnections.
-- Plug-in support for automating complex interaction scenarios.
-- Full logging and message history.
+- Interactively send and receive websocket messages
+- Customize headers, ping/pong messages, and other parameters
+- Handle SSL verification and reconnections
+- Plug-in support for automating complex interaction scenarios
+- Full logging and message history
+- Supports curl command line arguments for easy onboarding from Developer Tools or Burp Suite (use 'Copy as Curl' menu and replace `curl` with `wsrepl`)
 
 ## Installation
 
@@ -18,6 +19,14 @@ You can download and install wsrepl using pip:
 
 ```
 pip install wsrepl
+```
+
+Alternatively, you can clone this repository and install it from source:
+
+```
+git clone https://github.com/doyensec/wsrepl
+cd wsrepl
+pip install .
 ```
 
 ## Usage
@@ -31,28 +40,42 @@ wsrepl -u URL
 Replace URL with your target websocket URL, e.g. `wss://echo.websocket.org`. For more options and settings, you can use the -h or --help option:
 
 ```
-usage: wsrepl [-h] -u URL [-s] [-A USER_AGENT] [-O ORIGIN] [-H HEADER]
+usage: wsrepl [-h] [-u URL] [-i] [-s] [-k] [-X REQUEST] [-H HEADER]
+              [-b COOKIE] [--compressed] [-S] [-A USER_AGENT] [-O ORIGIN]
               [-F HEADERS_FILE] [--no-native-ping]
               [--ping-interval PING_INTERVAL] [--hide-ping-pong]
               [--ping-0x1-interval PING_0X1_INTERVAL]
               [--ping-0x1-payload PING_0X1_PAYLOAD]
               [--pong-0x1-payload PONG_0X1_PAYLOAD] [--hide-0x1-ping-pong]
-              [-t TTL] [-p HTTP_PROXY] [-k] [-r RECONNECT_INTERVAL]
-              [-i INITIAL_MESSAGES] [-P PLUGIN] [-v VERBOSE]
+              [-t TTL] [-p HTTP_PROXY] [-r RECONNECT_INTERVAL]
+              [-I INITIAL_MESSAGES] [-P PLUGIN] [-v VERBOSE]
+              [url_positional]
 
 Websocket Client
+
+positional arguments:
+  url_positional        Websocket URL (e.g. wss://echo.websocket.org)
 
 options:
   -h, --help            show this help message and exit
   -u URL, --url URL     Websocket URL (e.g. wss://echo.websocket.org)
-  -s, --small           Smaller UI
+  -i, --include         No effect, just for curl compatibility
+  -s, --silent          No effect, just for curl compatibility
+  -k, --insecure        Disable SSL verification
+  -X REQUEST, --request REQUEST
+                        No effect, just for curl compatibility
+  -H HEADER, --header HEADER
+                        Additional header (e.g. "X-Header: value"), can be
+                        used multiple times
+  -b COOKIE, --cookie COOKIE
+                        Cookie header (e.g. "name=value"), can be used
+                        multiple times
+  --compressed          No effect, just for curl compatibility
+  -S, --small           Smaller UI
   -A USER_AGENT, --user-agent USER_AGENT
                         User-Agent header
   -O ORIGIN, --origin ORIGIN
                         Origin header
-  -H HEADER, --header HEADER
-                        Additional header (e.g. "X-Header: value"), can be
-                        used multiple times
   -F HEADERS_FILE, --headers-file HEADERS_FILE
                         Additional headers file (e.g. "headers.txt")
   --no-native-ping      Disable native ping/pong messages
@@ -69,10 +92,9 @@ options:
   -t TTL, --ttl TTL     Heartbeet interval (seconds)
   -p HTTP_PROXY, --http-proxy HTTP_PROXY
                         HTTP Proxy Address (e.g. 127.0.0.1:8080)
-  -k, --insecure        Disable SSL verification
   -r RECONNECT_INTERVAL, --reconnect-interval RECONNECT_INTERVAL
                         Reconnect interval (seconds, default: 2)
-  -i INITIAL_MESSAGES, --initial-messages INITIAL_MESSAGES
+  -I INITIAL_MESSAGES, --initial-messages INITIAL_MESSAGES
                         Send the messages from this file on connect
   -P PLUGIN, --plugin PLUGIN
                         Plugin file to load
@@ -108,7 +130,9 @@ class MyPlugin(Plugin):
     # ... Other hooks can be defined here.
 ```
 
-Refer to the source of [Plugin class](wsrepl/Plugin.py) for the full list of hooks you can use and what they do.
+Refer to the source of [Plugin class](wsrepl/Plugin.py) for the full list of hooks you can use and what they do:
+
+![Plugin Hooks](docs/hooks-mermaid.png)
 
 ### Example Plugin
 
@@ -138,13 +162,15 @@ wsrepl -u URL -P auth_plugin.py
 
 Replace URL with your target websocket URL and auth_plugin.py with the path to the Python file containing your plugin.
 
+[docs/](./docs/) directory contains a few more example plugins.
+
 ## Contributing
 
-Contributions to wsrepl are welcome!
+Contributions to wsrepl are welcome! Please, [create an issue](https://github.com/doyensec/wsrepl/issues) or submit a pull request if you have any ideas or suggestions. In particular, adding more plugin examples would be very helpful.
 
 ## Credits
 
 This project has been sponsored by [Doyensec LLC](https://www.doyensec.com/).
 
-![Doyensec Research](https://github.com/doyensec/inql/blob/master/docs/doyensec_logo.svg "Doyensec Logo")
+![Doyensec Research](https://raw.githubusercontent.com/doyensec/inql/master/docs/doyensec_logo.svg "Doyensec Logo")
 

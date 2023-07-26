@@ -130,7 +130,7 @@ class MessageHandler:
         if initial_msgs_file:
             with open(initial_msgs_file, "r") as f:
                 for msg in f.readlines():
-                    self.initial_messages.append(WSMessage.outgoing(msg.strip()))
+                    messages.append(WSMessage.outgoing(msg.strip()))
         return messages
 
     async def init(self, event_loop) -> None:

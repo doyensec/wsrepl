@@ -1,5 +1,6 @@
-import importlib
+import importlib.util
 import os
+import os.path
 import inspect
 from urllib.parse import urlparse
 
@@ -94,6 +95,9 @@ def load_plugin(plugin_path) -> type[Plugin]:
     """Loads a plugin from a file path or returns an empty plugin if no path is specified"""
     if not plugin_path:
         return Plugin
+
+    if not os.path.isfile(plugin_path):
+        raise Exception("Plugin not found: {}".format(plugin_path))
 
     plugin_name = _get_plugin_name(plugin_path)
     spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)

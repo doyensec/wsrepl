@@ -33,13 +33,13 @@ parser.add_argument('-p', '--http-proxy',         type=str,                     
 parser.add_argument('-r', '--reconnect-interval', type=int,                      default=2,     help='Reconnect interval (seconds, default: 2)')
 parser.add_argument('-I', '--initial-messages',   type=str,                                     help='Send the messages from this file on connect')
 parser.add_argument('-P', '--plugin',             type=str,                                     help='Plugin file to load')
-parser.add_argument(      '--plugin-provided-url',          action='store_true', default=False, help='Plugin file to load')
+parser.add_argument(      '--plugin-provided-url',          action='store_true', default=False, help='Indicates if plugin provided dynamic url for websockets')
 parser.add_argument('-v', '--verbose',            type=int,                      default=3,     help='Verbosity level, 1-4 default: 3 (errors, warnings, info), 4 adds debug')
 
 def cli():
     args = parser.parse_args()
     url = args.url or args.url_positional
-    if url and not args.plugin_provided_url:
+    if url and args.plugin_provided_url is False:
         # Check and modify the URL protocol if necessary
         if url.startswith('http://'):
             return url.replace('http://', 'ws://', 1)
@@ -47,8 +47,10 @@ def cli():
             return url.replace('https://', 'wss://', 1)
         elif not url.startswith(('ws://', 'wss://')):
             parser.error('Invalid protocol. Supported protocols are http://, https://, ws://, and wss://.')
-    elif args.plugin_provided_url and not args.plugin:
-        parser.error('Please provide a WebSocket URL using either -u as a positional argument or use --plugin-provided-url if the WebSocket URL provided in a plugin')
+    elif args.plugin_provided_url is False and args.plugin is not None:
+        parser.error('Please provide a WebSocket URL using -u or use --plugin-provided-url if the WebSocket URL provided in a plugin')
+    else:
+        parser.error('Please provide either a WebSocket URL using -u or use --plugin-provided-url with --plugin if the WebSocket URL provided in a plugin')
 
     app = WSRepl(
         url=url,

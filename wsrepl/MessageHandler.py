@@ -36,16 +36,15 @@ class MessageHandler:
                  plugin_provided_url: bool | None   = None) -> None:
 
         self.app = app
+        self.plugin = load_plugin(plugin_path)(message_handler=self)
         if(plugin_provided_url):
-            self.plugin = load_plugin(plugin_path)(message_handler=self)
             try:
-                self.url = self.plugin.url
-                print("URL from plugin = " + self.url)
+                url = self.plugin.url
+                print("URL from plugin = " + url)
             except:
                 print("Failed to get URL path from plugin. Exiting...")
                 exit()  
-        else:
-            self.plugin = load_plugin(plugin_path)(message_handler=self)    
+
         self.initial_messages: list[WSMessage] = self._load_initial_messages(initial_msgs_file)
         processed_headers: OrderedDict = self._process_headers(headers, headers_file, user_agent, origin, cookies)
 
@@ -53,7 +52,7 @@ class MessageHandler:
             # Stuff WebsocketConnection needs to call back to us
             async_handler=self,
             # WebSocketApp args
-            url=self.url,
+            url=url,
             header=processed_headers
         )
 
@@ -71,7 +70,6 @@ class MessageHandler:
             'reconnect': reconnect_interval
         }
 
-        print("test")
         self.is_stopped = threading.Event()
 
         # Regular ping thread, conforming to RFC 6455 (ping uses opcode 0x9, pong uses 0xA, data is arbitrary but must be the same)

@@ -49,7 +49,7 @@ def cli():
             parser.error('Invalid protocol. Supported protocols are http://, https://, ws://, and wss://.')
     elif args.plugin_provided_url is False and args.plugin is not None:
         parser.error('Please provide a WebSocket URL using -u or use --plugin-provided-url if the WebSocket URL provided in a plugin')
-    else:
+    elif args.plugin_provided_url is False and args.plugin is None:
         parser.error('Please provide either a WebSocket URL using -u or use --plugin-provided-url with --plugin if the WebSocket URL provided in a plugin')
 
     app = WSRepl(

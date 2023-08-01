@@ -40,15 +40,11 @@ wsrepl -u URL
 Replace URL with your target websocket URL, e.g. `wss://echo.websocket.org`. For more options and settings, you can use the -h or --help option:
 
 ```
-usage: wsrepl [-h] [-u URL] [-i] [-s] [-k] [-X REQUEST] [-H HEADER]
-              [-b COOKIE] [--compressed] [-S] [-A USER_AGENT] [-O ORIGIN]
-              [-F HEADERS_FILE] [--no-native-ping]
-              [--ping-interval PING_INTERVAL] [--hide-ping-pong]
-              [--ping-0x1-interval PING_0X1_INTERVAL]
-              [--ping-0x1-payload PING_0X1_PAYLOAD]
-              [--pong-0x1-payload PONG_0X1_PAYLOAD] [--hide-0x1-ping-pong]
-              [-t TTL] [-p HTTP_PROXY] [-r RECONNECT_INTERVAL]
-              [-I INITIAL_MESSAGES] [-P PLUGIN] [-v VERBOSE]
+usage: wsrepl [-h] [-u URL] [-i] [-s] [-k] [-X REQUEST] [-H HEADER] [-b COOKIE] [--compressed] [-S] [-A USER_AGENT]
+              [-O ORIGIN] [-F HEADERS_FILE] [--no-native-ping] [--ping-interval PING_INTERVAL] [--hide-ping-pong]
+              [--ping-0x1-interval PING_0X1_INTERVAL] [--ping-0x1-payload PING_0X1_PAYLOAD]
+              [--pong-0x1-payload PONG_0X1_PAYLOAD] [--hide-0x1-ping-pong] [-t TTL] [-p HTTP_PROXY]
+              [-r RECONNECT_INTERVAL] [-I INITIAL_MESSAGES] [-P PLUGIN] [--plugin-provided-url] [-v VERBOSE]
               [url_positional]
 
 Websocket Client
@@ -65,11 +61,9 @@ options:
   -X REQUEST, --request REQUEST
                         No effect, just for curl compatibility
   -H HEADER, --header HEADER
-                        Additional header (e.g. "X-Header: value"), can be
-                        used multiple times
+                        Additional header (e.g. "X-Header: value"), can be used multiple times
   -b COOKIE, --cookie COOKIE
-                        Cookie header (e.g. "name=value"), can be used
-                        multiple times
+                        Cookie header (e.g. "name=value"), can be used multiple times
   --compressed          No effect, just for curl compatibility
   -S, --small           Smaller UI
   -A USER_AGENT, --user-agent USER_AGENT
@@ -98,9 +92,10 @@ options:
                         Send the messages from this file on connect
   -P PLUGIN, --plugin PLUGIN
                         Plugin file to load
+  --plugin-provided-url
+                        Indicates if plugin provided dynamic url for websockets
   -v VERBOSE, --verbose VERBOSE
-                        Verbosity level, 1-4 default: 3 (errors, warnings,
-                        info), 4 adds debug
+                        Verbosity level, 1-4 default: 3 (errors, warnings, info), 4 adds debug
 ```
 
 ## Automating with Plugins

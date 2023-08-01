@@ -17,25 +17,34 @@ class MessageHandler:
     def __init__(self,
                  app: textual.app.App,
                  url: str,
-                 user_agent: str | None         = None,
-                 origin: str | None             = None,
-                 cookies: list[str] | None      = None,
-                 headers: list[str] | None      = None,
-                 headers_file: str | None       = None,
-                 ping_interval: int | float     = 24,
-                 hide_ping_pong: bool           = False,
-                 ping_0x1_interval: int | float = 24,
-                 ping_0x1_payload: str | None   = None,
-                 pong_0x1_payload: str | None   = None,
-                 hide_0x1_ping_pong: bool       = False,
-                 reconnect_interval: int        = 0,
-                 proxy: str | None              = None,
-                 verify_tls: bool               = True,
-                 initial_msgs_file: str | None  = None,
-                 plugin_path: str | None        = None) -> None:
+                 user_agent: str | None             = None,
+                 origin: str | None                 = None,
+                 cookies: list[str] | None          = None,
+                 headers: list[str] | None          = None,
+                 headers_file: str | None           = None,
+                 ping_interval: int | float         = 24,
+                 hide_ping_pong: bool               = False,
+                 ping_0x1_interval: int | float     = 24,
+                 ping_0x1_payload: str | None       = None,
+                 pong_0x1_payload: str | None       = None,
+                 hide_0x1_ping_pong: bool           = False,
+                 reconnect_interval: int            = 0,
+                 proxy: str | None                  = None,
+                 verify_tls: bool                   = True,
+                 initial_msgs_file: str | None      = None,
+                 plugin_path: str | None            = None,
+                 plugin_provided_url: bool | None   = None) -> None:
 
         self.app = app
         self.plugin = load_plugin(plugin_path)(message_handler=self)
+        if(plugin_provided_url):
+            try:
+                url = self.plugin.url
+                print("URL from plugin = " + url)
+            except:
+                print("Failed to get URL path from plugin. Exiting...")
+                exit()  
+
         self.initial_messages: list[WSMessage] = self._load_initial_messages(initial_msgs_file)
         processed_headers: OrderedDict = self._process_headers(headers, headers_file, user_agent, origin, cookies)
 

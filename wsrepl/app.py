@@ -26,26 +26,27 @@ class WSRepl(App):
                  # URL is the only required argument
                  url: str,
                  # UI settings
-                 small: bool                    = False,
+                 small: bool                        = False,
                  # Websocket settings
-                 user_agent: str | None         = None,
-                 origin: str | None             = None,
-                 cookies: list[str] | None      = None,
-                 headers: list[str] | None      = None,
-                 headers_file: str | None       = None,
-                 ping_interval: int | float     = 24, # 0 -> disable auto ping
-                 hide_ping_pong: bool           = False,
-                 ping_0x1_interval: int | float = 24, # 0 -> disable fake ping
-                 ping_0x1_payload: str | None   = None,
-                 pong_0x1_payload: str | None   = None,
-                 hide_0x1_ping_pong: bool       = False,
-                 reconnect_interval: int        = 0,
-                 proxy: str | None              = None,
-                 verify_tls: bool               = True,
+                 user_agent: str | None             = None,
+                 origin: str | None                 = None,
+                 cookies: list[str] | None          = None,
+                 headers: list[str] | None          = None,
+                 headers_file: str | None           = None,
+                 ping_interval: int | float         = 24, # 0 -> disable auto ping
+                 hide_ping_pong: bool               = False,
+                 ping_0x1_interval: int | float     = 24, # 0 -> disable fake ping
+                 ping_0x1_payload: str | None       = None,
+                 pong_0x1_payload: str | None       = None,
+                 hide_0x1_ping_pong: bool           = False,
+                 reconnect_interval: int            =    0,
+                 proxy: str | None                  = None,
+                 verify_tls: bool                   = True,
                  # Other
-                 initial_msgs_file: str | None  = None,
-                 plugin_path: str | None        = None,
-                 verbosity: int                 = 3) -> None:
+                 initial_msgs_file: str | None      = None,
+                 plugin_path: str | None            = None,
+                 plugin_provided_url: bool | None   = None,
+                 verbosity: int                     = 3) -> None:
         super().__init__()
 
         # Small UI
@@ -62,7 +63,7 @@ class WSRepl(App):
             ping_0x1_interval=ping_0x1_interval, ping_0x1_payload=ping_0x1_payload, pong_0x1_payload=pong_0x1_payload,
             hide_0x1_ping_pong=hide_0x1_ping_pong,
             reconnect_interval=reconnect_interval, proxy=proxy, verify_tls=verify_tls,
-            initial_msgs_file=initial_msgs_file, plugin_path=plugin_path
+            initial_msgs_file=initial_msgs_file, plugin_path=plugin_path, plugin_provided_url=plugin_provided_url
         )
 
         # These are set in compose()

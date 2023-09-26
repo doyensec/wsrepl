@@ -42,9 +42,9 @@ def cli():
     if url and args.plugin_provided_url is False:
         # Check and modify the URL protocol if necessary
         if url.startswith('http://'):
-            return url.replace('http://', 'ws://', 1)
+            url = url.replace('http://', 'ws://', 1)
         elif url.startswith('https://'):
-            return url.replace('https://', 'wss://', 1)
+            url = url.replace('https://', 'wss://', 1)
         elif not url.startswith(('ws://', 'wss://')):
             parser.error('Invalid protocol. Supported protocols are http://, https://, ws://, and wss://.')
     elif args.plugin_provided_url is False and args.plugin is not None:

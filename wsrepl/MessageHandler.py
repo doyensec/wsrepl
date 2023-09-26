@@ -43,7 +43,7 @@ class MessageHandler:
                 print("URL from plugin = " + url)
             except:
                 print("Failed to get URL path from plugin. Exiting...")
-                exit()  
+                exit()
 
         self.initial_messages: list[WSMessage] = self._load_initial_messages(initial_msgs_file)
         processed_headers: OrderedDict = self._process_headers(headers, headers_file, user_agent, origin, cookies)
@@ -97,10 +97,20 @@ class MessageHandler:
         result = OrderedDict()
         cookie_headers = []
 
+        # Blacklisted headers that should be removed to avoid duplication
+        blacklisted_headers = [
+            "Host",
+            "Upgrade",
+            "Connection"
+        ]
+
         # Headers from command line take precedence
         if headers:
             for header in headers:
                 name, value = map(str.strip, header.split(":", 1))
+                if name in blacklisted_headers:
+                    continue
+
                 if name.lower().strip() == "cookie":
                     cookie_headers.append(value.strip())
                 else:
@@ -111,6 +121,9 @@ class MessageHandler:
             with open(headers_file, "r") as f:
                 for header in f.read().splitlines():
                     name, value = map(str.strip, header.split(":", 1))
+                    if name in blacklisted_headers:
+                        continue
+
                     if name.lower().strip() == "cookie":
                         cookie_headers.append(value.strip())
                     elif name not in result:

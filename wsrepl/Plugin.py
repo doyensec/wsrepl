@@ -10,11 +10,16 @@ class Plugin:
         self.messages = []
         self.ping_0x1_payload = ""
         self.pong_0x1_payload = ""
+        self.sets_origin = False
         self.init()
 
     def init(self):
         """Called when the plugin is loaded"""
         pass
+
+    def headers_callback(self):
+        """Set headers on connect and reconnect"""
+        return []
 
     async def send(self, message: WSMessage) -> None:
         """Send a message to the server"""
